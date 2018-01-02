@@ -19,26 +19,6 @@
 
     arr = [];
 
-    _time = diag_tickTime;
-
-    for "_i" from 0 to 25 do
-    {
-        _test = [ "this is some sample data ...", 1 ] call A3EXT_fnc_request;
-        arr pushBack _test;
-    };
-
-    diag_log format[ "FINISHED IN %1", diag_tickTime - _time ];
-
-    diag_log arr;
-};
-
-/*
-[] spawn
-{
-    sleep 5;
-
-    arr = [];
-
     for "_i" from 0 to 1300 do
     {
         [] spawn
@@ -58,4 +38,3 @@
         diag_log arr;
     };
 };
-*/
