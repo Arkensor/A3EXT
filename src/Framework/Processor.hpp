@@ -1,6 +1,6 @@
 /**********************************************************************************************************************\
 
-    DESCRIPTION: 
+    DESCRIPTION: rocessor that handles incoming jobs using multiple threads
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-    Copyright © 2017 Arkensor. All rights reserved!
+    Copyright © 2018 Arkensor. All rights reserved!
 
 \**********************************************************************************************************************/
 #ifndef A3DB_PROCESSOR_HPP
@@ -37,22 +37,14 @@ public:
            A3::DataTypes::int8 nThreads );
 
     void
-    Add( CProcessorWorkload oWorkload );
-
-    bool
-    try_get_result( CProcessorResult & oWorkload );
+    Add( CProcessorWorkload & roWorkload );
 
     bool
     try_get_results( std::vector<CProcessorResult> & oWorkload,
                      A3::DataTypes::uint64 nCurrentSize,
-                     A3::DataTypes::uint64 nMaxSize );
+                     A3::DataTypes::int64 nMaxSize );
 
-    size_t
-    request_size();
-
-    size_t
-    result_size();
-
+public:
     bool m_bActive;
 
 protected:

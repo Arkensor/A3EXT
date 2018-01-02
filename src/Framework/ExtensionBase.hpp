@@ -1,6 +1,6 @@
 /**********************************************************************************************************************\
 
-    DESCRIPTION: 
+    DESCRIPTION: Base extension that provides all the underlying functionality.
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-    Copyright © 2017 Arkensor. All rights reserved!
+    Copyright © 2018 Arkensor. All rights reserved!
 
 \**********************************************************************************************************************/
 #ifndef A3DB_EXTENSIONBASE_HPP
@@ -52,7 +52,7 @@ namespace Extension
 class CExtensionBase
 {
 public:
-    CExtensionBase( std::string strName, std::string strVersion );
+    CExtensionBase( const std::string & rstrName, const std::string & rstrVersion );
     virtual ~CExtensionBase();
 
     int
@@ -61,6 +61,7 @@ public:
 public:
     std::string m_strName;
     std::string m_strVersion;
+    std::string m_strExecutablePath;
     A3::DataTypes::int64 m_nMaxOutputSize;
     A3::DataTypes::EExtensionState m_eExtensionState;
     std::string m_strExtensionStateDescription;
@@ -86,29 +87,33 @@ protected:
 #endif
 
 protected:
+
+    void
+    Setup();
+
+    std::string
+    Execute( A3::Extension::Processor::CProcessorWorkload oWorkload );
+
     std::string
     GetDateTime( std::string strFormat );
 
     std::vector< A3::Extension::Processor::CProcessorResult >
     Worker( A3::Extension::Processor::CProcessorWorkload oWorkload );
 
-    std::string
-    Execute( A3::Extension::Processor::CProcessorWorkload oWorkload );
-
     void
-    addRequest( const char *pstrExtensionFunction, const char **pExtensionData, int nExtensionDataCount );
+    AddWorkloads(const char *pcExtensionFunction, const char **pExtensionData, int nExtensionDataCount);
 
     bool
-    checkResults( std::vector< A3::Extension::Processor::CProcessorResult > & roResults, A3::DataTypes::uint64 nCurrentSize );
+    CheckResults( std::vector< A3::Extension::Processor::CProcessorResult > &roResults, A3::DataTypes::uint64 nCurrentSize );
 
-    std::vector< std::string >
-    delimiter_split( const std::string & rstrData, char cDelimiter );
+    A3::DataTypes::TStrVector
+    Split( const std::string &rstrData, char cDelimiter );
 
     std::string
-    result_to_string( A3::Extension::Processor::CProcessorResult & roResult );
+    ResultToString(A3::Extension::Processor::CProcessorResult &roResult);
 
     std::vector< A3::Extension::Processor::CProcessorResult >
-    splitIntoMultipart( std::string strResult, A3::Extension::Processor::CProcessorWorkload & roWorkload );
+    SplitResult( std::string strResult, A3::Extension::Processor::CProcessorWorkload &roWorkload );
 };
 
 }; // end namespace Extension

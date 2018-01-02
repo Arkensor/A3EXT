@@ -9,20 +9,26 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-    Copyright © 2017 Arkensor. All rights reserved!
+    Copyright © 2018 Arkensor. All rights reserved!
 
 \**********************************************************************************************************************/
 
 params
 [
-	[ "_data", "", [ "", 0 ] ],
-	[ "_return", 1, [ 0 ] ]
+	[ "_ticketID", -1, [0] ]
 ];
 
-private _ticketID = [ _data, _return ] call A3EXT_fnc_enqueue;
-
-if ( _return isEqualTo 1 && ( !( _ticketID isEqualTo -1 ) ) ) exitWith
+if ( _ticketID isEqualTo -1 ) exitWith
 {
-	private _result = [ _ticketID ] call A3EXT_fnc_dequeue;
-	_result;
+    diag_log "A call to a non existing ticket was performed. Check of possible errors and data loss!";
 };
+
+private _stringTicket = str _ticketID;
+
+waitUntil { !isNil { A3EXT_NS getVariable _stringTicket } };
+
+private _result = A3EXT_NS getVariable _stringTicket;
+
+A3EXT_NS setVariable [ _stringTicket, nil ];
+
+_result;

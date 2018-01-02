@@ -1,6 +1,6 @@
 /**********************************************************************************************************************\
 
-    DESCRIPTION: 
+    DESCRIPTION: Thread safe locking queue
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-    Copyright © 2017 Arkensor. All rights reserved!
+    Copyright © 2018 Arkensor. All rights reserved!
 
 \**********************************************************************************************************************/
 
@@ -59,28 +59,9 @@ CProcessorQueue< T >::pop()
 
 template < class T >
 bool
-CProcessorQueue< T >::try_pop_result( T & roElement )
-{
-    std::lock_guard< std::mutex > lock( m_oQueueLock );
-
-    if (!m_oQueue.empty())
-    {
-
-        roElement = m_oQueue.front();
-
-        m_oQueue.pop();
-
-        return true;
-    }
-
-    return false;
-}
-
-template < class T >
-bool
 CProcessorQueue< T >::try_pop_results( std::vector< T > & roElements,
-                                  A3::DataTypes::uint64 nCurrentSize,
-                                  A3::DataTypes::uint64 nMaxSize )
+                                       A3::DataTypes::int64 nCurrentSize,
+                                       A3::DataTypes::int64 nMaxSize )
 {
     --nMaxSize;
 
@@ -100,7 +81,7 @@ CProcessorQueue< T >::try_pop_results( std::vector< T > & roElements,
     {
         T oElement = m_oQueue.front();
 
-        A3::DataTypes::uint64 nLength = oElement.m_strData.size() + oElement.m_strID.size() + 12; //Extra characters in ARMA array e.g [] & str esc.
+        A3::DataTypes::int64 nLength = oElement.m_strData.size() + oElement.m_strID.size() + 12; //Extra characters in ARMA array e.g [] & str esc.
 
         if ( ( nLength + nCurrentSize ) > nMaxSize )
         {

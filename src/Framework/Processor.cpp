@@ -1,6 +1,6 @@
 /**********************************************************************************************************************\
 
-    DESCRIPTION: 
+    DESCRIPTION: Processor that handles incoming jobs using multiple threads
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-    Copyright © 2017 Arkensor. All rights reserved!
+    Copyright © 2018 Arkensor. All rights reserved!
 
 \**********************************************************************************************************************/
 #include "Processor.hpp"
@@ -24,8 +24,8 @@ namespace Processor
 {
 
 CProcessor::CProcessor()
+    : m_bActive( false )
 {
-    m_bActive = false;
 }
 
 CProcessor::~CProcessor()
@@ -60,35 +60,17 @@ CProcessor::start( std::function< std::vector< CProcessorResult >( CProcessorWor
 }
 
 void
-CProcessor::Add( CProcessorWorkload r )
+CProcessor::Add( CProcessorWorkload & roWorkload )
 {
-    oWorkloadQueue.push( r ); //Todo check if we can make this copyless with references though all the processing
-}
-
-bool
-CProcessor::try_get_result( CProcessorResult & oWorkload )
-{
-    return oResultQueue.try_pop_result( oWorkload );
+    oWorkloadQueue.push( roWorkload );
 }
 
 bool
 CProcessor::try_get_results( std::vector<CProcessorResult> & oWorkload,
                              A3::DataTypes::uint64 nCurrentSize,
-                             A3::DataTypes::uint64 nMaxSize )
+                             A3::DataTypes::int64 nMaxSize )
 {
     return oResultQueue.try_pop_results( oWorkload, nCurrentSize, nMaxSize );
-}
-
-size_t
-CProcessor::request_size()
-{
-    return oResultQueue.size();
-}
-
-size_t
-CProcessor::result_size()
-{
-    return oResultQueue.size();
 }
 
 void
@@ -100,7 +82,7 @@ CProcessor::run( std::function< std::vector< CProcessorResult >( CProcessorWorkl
 
         std::vector< CProcessorResult > oResults = oFunction( oWorkLoad );
 
-        for ( CProcessorResult result : oResults )
+        for ( CProcessorResult & result : oResults )
         {
             oResultQueue.push( result );
         }

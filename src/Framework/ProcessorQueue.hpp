@@ -1,6 +1,6 @@
 /**********************************************************************************************************************\
 
-    DESCRIPTION: 
+    DESCRIPTION: Thread safe locking queue
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-    Copyright © 2017 Arkensor. All rights reserved!
+    Copyright © 2018 Arkensor. All rights reserved!
 
 \**********************************************************************************************************************/
 #ifndef A3DB_PROCESSORQUEUE_HPP
@@ -39,11 +39,9 @@ public:
 
 	T pop();
 
-	bool try_pop_result( T & roElement );
-
 	bool try_pop_results( std::vector< T > &roElements,
-                          A3::DataTypes::uint64 nCurrentSize,
-                          A3::DataTypes::uint64 nMaxSize );
+						  A3::DataTypes::int64 nCurrentSize,
+						  A3::DataTypes::int64 nMaxSize );
 
 	size_t size();
 

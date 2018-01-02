@@ -1,6 +1,6 @@
 /**********************************************************************************************************************\
 
-    DESCRIPTION: 
+    DESCRIPTION: Base extension that provides all the underlying functionality.
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-    Copyright © 2017 Arkensor. All rights reserved!
+    Copyright © 2018 Arkensor. All rights reserved!
 
 \**********************************************************************************************************************/
 
@@ -23,12 +23,13 @@ namespace A3
 namespace Extension
 {
 
-CExtensionBase::CExtensionBase( std::string strName, std::string strVersion )
-    : m_strName( strName )
-    , m_strVersion( strVersion )
+CExtensionBase::CExtensionBase( const std::string & rstrName, const std::string & rstrVersion )
+    : m_strName( rstrName )
+    , m_strVersion( rstrVersion )
     , m_eExtensionState( A3::DataTypes::EExtensionState::e_Initialized )
     , m_strExtensionStateDescription( "" )
     , m_nMaxOutputSize( -1 )
+    , m_strExecutablePath( std::experimental::filesystem::current_path().string() )
 {
 #ifdef _EXTENSION_USE_CONSOLE_LOGGING
     AllocConsole();
@@ -38,7 +39,7 @@ CExtensionBase::CExtensionBase( std::string strName, std::string strVersion )
     SetConsoleTitle( TEXT( strConsoleTitle.c_str() ) );
 
     //Disable key combinations
-    SetConsoleCtrlHandler( NULL, true );
+    SetConsoleCtrlHandler( nullptr, true );
 
     //Disable closing button
     HWND oConsoleModule = ::GetConsoleWindow();
@@ -63,7 +64,7 @@ CExtensionBase::CExtensionBase( std::string strName, std::string strVersion )
 #endif
 
 #ifdef _EXTENSION_USE_FILE_DEFAULT_LOGGER
-    std::string strLogLocation = std::experimental::filesystem::current_path().string() + "/@" + m_strName + "/Logs";
+    std::string strLogLocation = m_strExecutablePath + "/@" + m_strName + "/Logs";
 
     std::string strLogName = fmt::format( "{0}/{1}_{2}.log", strLogLocation, m_strName, GetDateTime( "%Y-%m-%d_%I-%M-%S" ) );
 
@@ -174,35 +175,35 @@ CExtensionBase::call( char * pstrOutput, int nOutputSize, const char *pstrFuncti
 
     if( !m_poProcessor->m_bActive )
     {
-
-#ifdef _EXTENSION_MAX_THREADS
-    #define _EXTENSION_THREAD_COUNT _EXTENSION_MAX_THREADS
-#else
-    #define _EXTENSION_THREAD_COUNT -1
-#endif
+        #ifdef _EXTENSION_MAX_THREADS
+            #define _EXTENSION_THREAD_COUNT _EXTENSION_MAX_THREADS
+        #else
+            #define _EXTENSION_THREAD_COUNT -1
+        #endif
 
         m_poProcessor->start( std::bind( &A3::Extension::CExtensionBase::Worker, this, std::placeholders::_1 ), _EXTENSION_THREAD_COUNT );
+
+        Setup(); //Load custom setup from outside the framework
     }
 
     if( nArguments )
     {
-        LOG_ALL_FORMAT( loglevel::critical, "pstrFunction: {0}, nArguments: {1}", pstrFunction , nArguments );
-
-        addRequest( pstrFunction, pArguments, nArguments );
+        AddWorkloads(pstrFunction, pArguments, nArguments);
     }
 
-    A3::DataTypes::uint64 nCurrentSize = 2; //Opening and closing brackets.
+    //Opening and closing brackets.
+    A3::DataTypes::uint64 nCurrentSize = 2;
 
-    //Check for results
     std::string strResult = "[";
 
-    std::vector < A3::Extension::Processor::CProcessorResult > results;
+    std::vector< A3::Extension::Processor::CProcessorResult > results;
 
-    if ( this->checkResults( results, nCurrentSize ) )
+    //Check for results and append them
+    if (this->CheckResults(results, nCurrentSize) )
     {
         for ( auto oResult : results )
         {
-            strResult += result_to_string( oResult ) + ",";
+            strResult += ResultToString(oResult) + ",";
         }
 
         strResult.pop_back();
@@ -210,7 +211,7 @@ CExtensionBase::call( char * pstrOutput, int nOutputSize, const char *pstrFuncti
 
     strResult += "]"; //Append closing bracket
 
-    strncpy( pstrOutput, strResult.c_str(), nOutputSize );
+    strncpy( pstrOutput, strResult.c_str(), ( size_t ) nOutputSize );
 
     return 0;
 }
@@ -218,21 +219,23 @@ CExtensionBase::call( char * pstrOutput, int nOutputSize, const char *pstrFuncti
 std::vector< A3::Extension::Processor::CProcessorResult >
 CExtensionBase::Worker( A3::Extension::Processor::CProcessorWorkload oWorkload )
 {
-    return splitIntoMultipart( Execute( oWorkload ), oWorkload );
+    return SplitResult(Execute(oWorkload), oWorkload);
 }
 
 void
-CExtensionBase::addRequest( const char *pstrExtensionFunction, const char **pExtensionData, int nExtensionDataCount )
+CExtensionBase::AddWorkloads( const char *pcExtensionFunction, const char **pExtensionData, int nExtensionDataCount )
 {
     for ( int nExtensionDataSet = 0; nExtensionDataSet < nExtensionDataCount; ++nExtensionDataSet )
     {
         std::string strArguments( pExtensionData[ nExtensionDataSet ] );
         strArguments = strArguments.substr( 1, ( strArguments.size() - 2 ) );
-        A3::DataTypes::TStrVector oArguments = delimiter_split( strArguments, 29 );
+        A3::DataTypes::TStrVector oArguments = Split(strArguments, 29);
+        std::string strID;
+        std::string strFunction( pcExtensionFunction );
 
         if( oArguments.size() > 1 )
         {
-            std::string strID = oArguments[ 0 ];
+            strID = oArguments[ 0 ];
             oArguments.erase( oArguments.begin() );
 
             //In case we do not need a result
@@ -240,26 +243,23 @@ CExtensionBase::addRequest( const char *pstrExtensionFunction, const char **pExt
             {
                 strID.clear();
             }
+        }
 
-            m_poProcessor->Add(
-                    A3::Extension::Processor::CProcessorWorkload( strID, oArguments ) );
-        }
-        else
-        {
-            m_poProcessor->Add(
-                    A3::Extension::Processor::CProcessorWorkload( "", oArguments ) );
-        }
+        A3::Extension::Processor::CProcessorWorkload oWorkload( strID, strFunction, oArguments );
+
+        m_poProcessor->Add( oWorkload );
     }
 }
 
 bool
-CExtensionBase::checkResults( std::vector< A3::Extension::Processor::CProcessorResult > & roResults, A3::DataTypes::uint64 nCurrentSize )
+CExtensionBase::CheckResults( std::vector<A3::Extension::Processor::CProcessorResult> &roResults,
+                              A3::DataTypes::uint64 nCurrentSize)
 {
     return m_poProcessor->try_get_results( roResults, nCurrentSize, m_nMaxOutputSize );
 }
 
 std::vector< std::string >
-CExtensionBase::delimiter_split( const std::string & rstrData, char cDelimiter )
+CExtensionBase::Split(const std::string &rstrData, char cDelimiter)
 {
     std::vector< std::string > oResult;
     std::stringstream string_stream( rstrData );
@@ -274,7 +274,7 @@ CExtensionBase::delimiter_split( const std::string & rstrData, char cDelimiter )
 }
 
 std::string
-CExtensionBase::result_to_string( A3::Extension::Processor::CProcessorResult & roResult )
+CExtensionBase::ResultToString( A3::Extension::Processor::CProcessorResult &roResult )
 {
     return fmt::format( "[{0},{1},\"{2}\"]",
                         roResult.m_strID,
@@ -283,17 +283,17 @@ CExtensionBase::result_to_string( A3::Extension::Processor::CProcessorResult & r
 }
 
 std::vector< A3::Extension::Processor::CProcessorResult >
-CExtensionBase::splitIntoMultipart( std::string strResult, A3::Extension::Processor::CProcessorWorkload & roWorkload )
+CExtensionBase::SplitResult( std::string strResult, A3::Extension::Processor::CProcessorWorkload &roWorkload )
 {
-    std::vector< A3::Extension::Processor::CProcessorResult > results;
+    std::vector< A3::Extension::Processor::CProcessorResult > oResults;
 
-    //Workload hat has no id to return results -> input only call
+    //Workload hat has no id to return oResults -> input only call
     if( roWorkload.m_strID.empty() )
     {
-        return results;
+        return oResults;
     }
 
-    //Need to find the most optimal max size to store, to if there is lots of big results, little results get returned too..
+    //Need to find the most optimal max size to store, to if there is lots of big oResults, little oResults get returned too..
 
     auto nMaxReturnConsumption = ( A3::DataTypes::uint64 )( 0.8 * m_nMaxOutputSize ); //Allow up to 80% of the return to be one request
     auto nParts = strResult.size() / nMaxReturnConsumption; //Amount of parts for the case of too much data for one
@@ -302,9 +302,9 @@ CExtensionBase::splitIntoMultipart( std::string strResult, A3::Extension::Proces
     //Build Results as long as our data output is longer than one Result
     while ( strResult.size() > nMaxReturnConsumption )
     {
-        results.push_back( A3::Extension::Processor::CProcessorResult (
-                roWorkload.m_strID,
-                strResult.substr( 0, ( size_t ) nMaxReturnConsumption ), true, nParts ) );
+        oResults.emplace_back( A3::Extension::Processor::CProcessorResult (
+                                roWorkload.m_strID,
+                                strResult.substr( 0, ( size_t ) nMaxReturnConsumption ), true, nParts ) );
 
         strResult = strResult.substr( ( size_t )nMaxReturnConsumption );
 
@@ -312,13 +312,13 @@ CExtensionBase::splitIntoMultipart( std::string strResult, A3::Extension::Proces
     }
 
     //Put in final Result, or the only one in case it was small enough for one anyway
-    results.push_back( A3::Extension::Processor::CProcessorResult(
-            roWorkload.m_strID,
-            strResult,
-            bIsMultiPart,
-            ( bIsMultiPart ? 0 : -1 ) ) );
+    oResults.emplace_back( A3::Extension::Processor::CProcessorResult(
+                            roWorkload.m_strID,
+                            strResult,
+                            bIsMultiPart,
+                            ( bIsMultiPart ? 0 : -1 ) ) );
 
-    return results;
+    return oResults;
 }
 
 }; // end namespace CExtension

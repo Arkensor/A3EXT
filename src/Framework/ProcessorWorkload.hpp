@@ -1,6 +1,6 @@
 /**********************************************************************************************************************\
 
-    DESCRIPTION: 
+    DESCRIPTION: Workloads, parsed from the ArmA input
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -9,16 +9,16 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-    Copyright © 2017 Arkensor. All rights reserved!
+    Copyright © 2018 Arkensor. All rights reserved!
 
 \**********************************************************************************************************************/
-#ifndef A3DB_PROCESSORRESULT_HPP
-#define A3DB_PROCESSORRESULT_HPP
+#ifndef A3DB_WORKLOAD_HPP
+#define A3DB_WORKLOAD_HPP
 
-#include "../Configuration.hpp"
 #include "DataTypes.hpp"
 
 #include <string>
+#include <vector>
 
 namespace A3
 {
@@ -27,27 +27,22 @@ namespace Extension
 namespace Processor
 {
 
-class CProcessorResult
+class CProcessorWorkload
 {
 public:
-    CProcessorResult( const std::string & rstrID,
-                      const std::string & rstrData );
+    CProcessorWorkload( const std::string & rstrID,
+                        const std::string & rstrFunction,
+                        const A3::DataTypes::TStrVector & roArguments );
 
-    CProcessorResult(const std::string & rstrID,
-                     const std::string & rstrData,
-                     bool bIsMultiPart ,
-                     A3::DataTypes::uint64 nPartIndex );
-
-    virtual ~CProcessorResult();
+    virtual ~CProcessorWorkload();
 
     std::string m_strID;
-    std::string m_strData;
-    bool m_bIsMultiPart;
-    A3::DataTypes::uint64 m_nPartIndex;
+    std::string m_strFunction;
+    A3::DataTypes::TStrVector m_oArguments;
 };
 
 }; // end namespace CProcessor
 }; // end namespace Extension
 }; // end namespace A3
 
-#endif //A3DB_PROCESSORRESULT_HPP
+#endif //A3DB_WORKLOAD_HPP

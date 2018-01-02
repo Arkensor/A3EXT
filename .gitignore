@@ -1,0 +1,7 @@
+*.ipr
+*.iws
+src/.idea/
+src/cmake-build-debug-x64/
+src/cmake-build-debug-x86/
+src/cmake-build-release-x64/
+src/cmake-build-release-x86/

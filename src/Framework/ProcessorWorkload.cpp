@@ -1,6 +1,6 @@
 /**********************************************************************************************************************\
 
-    DESCRIPTION: 
+    DESCRIPTION: Workloads, parsed from the ArmA input
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -9,16 +9,10 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-    Copyright © 2017 Arkensor. All rights reserved!
+    Copyright © 2018 Arkensor. All rights reserved!
 
 \**********************************************************************************************************************/
-#ifndef A3DB_WORKLOAD_HPP
-#define A3DB_WORKLOAD_HPP
-
-#include "DataTypes.hpp"
-
-#include <string>
-#include <vector>
+#include "ProcessorWorkload.hpp"
 
 namespace A3
 {
@@ -27,20 +21,19 @@ namespace Extension
 namespace Processor
 {
 
-class CProcessorWorkload
+CProcessorWorkload::CProcessorWorkload( const std::string & rstrID,
+                                        const std::string & rstrFunction,
+                                        const A3::DataTypes::TStrVector & roArguments )
+    : m_strID( rstrID )
+    , m_strFunction( rstrFunction )
+    , m_oArguments( roArguments )
 {
-public:
-    CProcessorWorkload( const std::string & rstrID,
-                        const A3::DataTypes::TStrVector & oArguments );
+}
 
-    virtual ~CProcessorWorkload();
-
-    std::string m_strID;
-    A3::DataTypes::TStrVector m_oArguments;
-};
+CProcessorWorkload::~CProcessorWorkload()
+{
+}
 
 }; // end namespace CProcessor
 }; // end namespace Extension
 }; // end namespace A3
-
-#endif //A3DB_WORKLOAD_HPP

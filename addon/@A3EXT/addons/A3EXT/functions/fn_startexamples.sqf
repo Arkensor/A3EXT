@@ -9,13 +9,9 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-    Copyright © 2017 Arkensor. All rights reserved!
+    Copyright © 2018 Arkensor. All rights reserved!
 
 \**********************************************************************************************************************/
-
-//Todo less copies in the extension
-//Todo Cleanup code with typedefs inside the the classes
-//Todo descriptions in all files
 
 [] spawn
 {
