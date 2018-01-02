@@ -15,7 +15,7 @@
 
 params
 [
-    [ "_ticketID", -1, [0] ]
+    [ "_ticketID", -1, [ 0 ] ]
 ];
 
 if ( _ticketID isEqualTo -1 ) exitWith
@@ -25,7 +25,9 @@ if ( _ticketID isEqualTo -1 ) exitWith
 
 private _stringTicket = str _ticketID;
 
-waitUntil { !isNil { A3EXT_NS getVariable _stringTicket } };
+diag_log format["canSuspendasd: %1", canSuspend];
+
+waitUntil { diag_log "waiting..."; diag_log format["canSuspend: %1", canSuspend]; !isNil { A3EXT_NS getVariable _stringTicket } };
 
 private _result = A3EXT_NS getVariable _stringTicket;
 

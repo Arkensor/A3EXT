@@ -13,7 +13,6 @@
 
 \**********************************************************************************************************************/
 
-#include <filesystem>
 #include "Framework/ExtensionBase.hpp"
 
 namespace A3
@@ -109,6 +108,9 @@ CExtensionBase::Execute( A3::Extension::Processor::CProcessorWorkload oWorkload 
     {
         //do something with oArugment ...
     }
+
+    //Some dummy work that takes 5 seconds to execute
+    std::this_thread::sleep_for( std::chrono::seconds( 5 ) );
 
     /*
      * You may do anything inside this function. You can also declare functions outside of this function

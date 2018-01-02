@@ -43,6 +43,7 @@ namespace loglevel = spdlog::level;
 //System includes
 #include <string>
 #include <memory>
+#include <filesystem>
 
 namespace A3
 {
