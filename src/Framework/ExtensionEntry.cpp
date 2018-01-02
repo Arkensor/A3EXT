@@ -49,7 +49,7 @@ static void __attribute__( ( constructor ) ) extension_init( void )
 }
 
 #ifndef _WINDOWS
-static void __attribute__( ( destructor ) )	extension_destroy( void )
+static void __attribute__( ( destructor ) )    extension_destroy( void )
 {
     delete g_Extension;
 }

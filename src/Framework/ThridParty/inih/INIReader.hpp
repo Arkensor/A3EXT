@@ -43,7 +43,7 @@ public:
     // and valid false values are "false", "no", "off", "0" (not case sensitive).
     bool GetBoolean(std::string section, std::string name, bool default_value);
 
-	const std::set<std::string> getSections();
+    const std::set<std::string> getSections();
 
 private:
     int _error;

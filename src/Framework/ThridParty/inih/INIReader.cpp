@@ -80,10 +80,10 @@ int INIReader::ValueHandler(void* user, const char* section, const char* name,
 }
 
 const std::set<std::string> INIReader::getSections() {
-	std::set<std::string> s;
-	for (auto it = _values.begin(); it != _values.end(); ++it) {
-		string section = it->first.substr(0, it->first.find("="));
-		s.insert(section);
-	}
-	return s;
+    std::set<std::string> s;
+    for (auto it = _values.begin(); it != _values.end(); ++it) {
+        string section = it->first.substr(0, it->first.find("="));
+        s.insert(section);
+    }
+    return s;
 }

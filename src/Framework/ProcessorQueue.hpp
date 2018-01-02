@@ -37,18 +37,18 @@ public:
 
     void push( T oElement );
 
-	T pop();
+    T pop();
 
-	bool try_pop_results( std::vector< T > &roElements,
-						  A3::DataTypes::int64 nCurrentSize,
-						  A3::DataTypes::int64 nMaxSize );
+    bool try_pop_results( std::vector< T > &roElements,
+                          A3::DataTypes::int64 nCurrentSize,
+                          A3::DataTypes::int64 nMaxSize );
 
-	size_t size();
+    size_t size();
 
 protected:
-	std::queue< T > m_oQueue;
-	mutable std::mutex m_oQueueLock;
-	std::condition_variable m_oConditionVariable;
+    std::queue< T > m_oQueue;
+    mutable std::mutex m_oQueueLock;
+    std::condition_variable m_oConditionVariable;
 };
 
 }; // end namespace Processor

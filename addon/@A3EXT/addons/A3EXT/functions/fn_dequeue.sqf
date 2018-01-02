@@ -15,7 +15,7 @@
 
 params
 [
-	[ "_ticketID", -1, [0] ]
+    [ "_ticketID", -1, [0] ]
 ];
 
 if ( _ticketID isEqualTo -1 ) exitWith

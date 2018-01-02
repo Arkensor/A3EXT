@@ -15,14 +15,14 @@
 
 params
 [
-	[ "_data", "", [ "", 0 ] ],
-	[ "_return", 1, [ 0 ] ]
+    [ "_data", "", [ "", 0 ] ],
+    [ "_return", 1, [ 0 ] ]
 ];
 
 private _ticketID = [ _data, _return ] call A3EXT_fnc_enqueue;
 
 if ( _return isEqualTo 1 && ( !( _ticketID isEqualTo -1 ) ) ) exitWith
 {
-	private _result = [ _ticketID ] call A3EXT_fnc_dequeue;
-	_result;
+    private _result = [ _ticketID ] call A3EXT_fnc_dequeue;
+    _result;
 };

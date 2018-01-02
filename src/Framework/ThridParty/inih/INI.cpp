@@ -1,9 +1,9 @@
 /* inih -- simple .INI file parser
 
-	inih is released under the New BSD license (see LICENSE.txt). Go to the project
-	home page for more info:
+    inih is released under the New BSD license (see LICENSE.txt). Go to the project
+    home page for more info:
 
-	https://github.com/benhoyt/inih
+    https://github.com/benhoyt/inih
 */
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
 #define _CRT_SECURE_NO_WARNINGS
@@ -62,7 +62,7 @@ static char* find_chars_or_comment(const char* s, const char* chars)
 /* Version of strncpy that ensures dest (size bytes) is null-terminated. */
 static char* strncpy0(char* dest, const char* src, size_t size)
 {
-	strcpy_s(dest, size, src);
+    strcpy_s(dest, size, src);
     dest[size - 1] = '\0';
     return dest;
 }

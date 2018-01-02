@@ -112,15 +112,15 @@ CStartParameterHandler::~CStartParameterHandler()
 LPSTR
 CStartParameterHandler::GetCommandLineA()
 {
-	char *pstrPath = new char[ 4096 ];
-	char *strCmdline = new char[ 4096 ];
-	FILE *oFile;
+    char *pstrPath = new char[ 4096 ];
+    char *strCmdline = new char[ 4096 ];
+    FILE *oFile;
 
-	sprintf( pstrPath, "/proc/%ld/cmdline", (long)getpid() );
-	oFile = fopen(pstrPath, "r");
+    sprintf( pstrPath, "/proc/%ld/cmdline", (long)getpid() );
+    oFile = fopen(pstrPath, "r");
 
-	if (oFile)
-	{
+    if (oFile)
+    {
         size_t nRead = fread( strCmdline, sizeof(char), 4096, oFile );
 
         for( unsigned int nChar = 0; nChar < nRead; ++nChar ) //Todo - Do we need this?
@@ -131,19 +131,19 @@ CStartParameterHandler::GetCommandLineA()
             }
         }
 
-	    strCmdline[ nRead - 1 ] = '\0';
+        strCmdline[ nRead - 1 ] = '\0';
 
         fclose(oFile);
-	}
-	else
-	{
+    }
+    else
+    {
         strCmdline[ 0 ] = '\0';
-	}
+    }
 
     //Cleanup
     delete pstrPath;
 
-	return strCmdline;
+    return strCmdline;
 }
 #endif
 

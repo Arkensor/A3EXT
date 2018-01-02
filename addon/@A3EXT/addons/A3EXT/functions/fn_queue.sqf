@@ -56,29 +56,29 @@
     {
         if ( !( ( count ( A3EXT_NS getVariable [ "A3EXT_INPUT_QUEUE", [] ] ) ) isEqualTo 0 ) ) then
         {
-			private _data = [];
+            private _data = [];
 
-			isNil
-			{
-				{
-					_data pushBack _x;
+            isNil
+            {
+                {
+                    _data pushBack _x;
 
-					private _arr = ( A3EXT_NS getVariable [ "A3EXT_INPUT_QUEUE", [] ] );
+                    private _arr = ( A3EXT_NS getVariable [ "A3EXT_INPUT_QUEUE", [] ] );
 
                     if( ( count _arr ) isEqualTo 0 ) exitWith {};
 
-					_arr deleteAt 0;
+                    _arr deleteAt 0;
 
                     A3EXT_NS setVariable [ "A3EXT_INPUT_QUEUE", _arr ];
 
                     if ( _forEachIndex isEqualTo 1023 ) exitWith {};
 
-				} forEach +( A3EXT_NS getVariable [ "A3EXT_INPUT_QUEUE", [] ] );
-			};
+                } forEach +( A3EXT_NS getVariable [ "A3EXT_INPUT_QUEUE", [] ] );
+            };
 
             private _result = "A3EXT" callExtension [ "BULK", _data ];
 
-			[ _result ] call _parseResult;
+            [ _result ] call _parseResult;
         }
         else
         {
