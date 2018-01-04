@@ -1,5 +1,9 @@
 cmake_minimum_required( VERSION 3.8 )
 
+##################################################################
+# define a source group for template files in Visual Studio
+SOURCE_GROUP( "Template Files" REGULAR_EXPRESSION ".*tpp" )
+
 project( A3EXT )
 
 if( MSVC )

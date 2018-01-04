@@ -4,12 +4,14 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-    RESPONSIBILITY: Arkensor
     CREATION DATE:  31.12.2017
 
 ------------------------------------------------------------------------------------------------------------------------
 
-    Copyright © 2018 Arkensor. All rights reserved!
+    Copyright © 2018
+    Paul L. (https://github.com/Arkensor)
+    Ollie W. (https://github.com/BoGuu)
+    All rights reserved!
 
 \**********************************************************************************************************************/
 
@@ -45,7 +47,7 @@ CProcessorQueue< T >::pop()
 {
     std::unique_lock< std::mutex > lock( m_oQueueLock );
 
-    while (m_oQueue.empty())
+    while ( m_oQueue.empty() )
     {
         m_oConditionVariable.wait(lock);
     }
