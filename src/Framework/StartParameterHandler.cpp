@@ -18,6 +18,8 @@
 
 #ifdef _WINDOWS
     #include <Windows.h>
+#else
+    #include <unistd.h>
 #endif
 
 #include <algorithm>
@@ -34,6 +36,10 @@ CStartParameterHandler::CStartParameterHandler()
 {
     LPSTR pParameter = GetCommandLineA();
     std::string strParameters( &pParameter[0] );
+
+#ifndef _WINDOWS
+    delete[] pParameter;
+#endif
 
     while ( !strParameters.empty() )
     {
@@ -114,38 +120,36 @@ CStartParameterHandler::~CStartParameterHandler()
 LPSTR
 CStartParameterHandler::GetCommandLineA()
 {
-    char *pstrPath = new char[ 4096 ];
-    char *strCmdline = new char[ 4096 ];
+    char *pstrPath = new char[ 4096 ]();
+    char *pstrCmdline = new char[ 4096 ]();
     FILE *oFile;
 
-    sprintf( pstrPath, "/proc/%ld/cmdline", (long)getpid() );
-    oFile = fopen(pstrPath, "r");
+    sprintf( pstrPath, "/proc/%ld/cmdline", ( long ) getpid() );
+
+	oFile = fopen( pstrPath, "r" );
+
+    delete pstrPath;
 
     if (oFile)
     {
-        size_t nRead = fread( strCmdline, sizeof(char), 4096, oFile );
+        size_t nRead = fread( pstrCmdline, sizeof(char), 4096, oFile );
 
-        for( unsigned int nChar = 0; nChar < nRead; ++nChar ) //Todo - Do we need this?
+        for( unsigned int nChar = 0; nChar < nRead; ++nChar )
         {
-            if ( strCmdline[ nChar ] == 0 )
+            if ( pstrCmdline[ nChar ] == 0 )
             {
-                strCmdline[ nChar ] = ' ';
+                pstrCmdline[ nChar ] = ' ';
             }
         }
-
-        strCmdline[ nRead - 1 ] = '\0';
 
         fclose(oFile);
     }
     else
     {
-        strCmdline[ 0 ] = '\0';
+        throw std::runtime_error( "Could not fetch start parameter." );
     }
 
-    //Cleanup
-    delete pstrPath;
-
-    return strCmdline;
+    return pstrCmdline;
 }
 #endif
 
