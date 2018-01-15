@@ -25,7 +25,7 @@
 
 /*
  * Define the maximum amount of threads that will be created
- * If not defined, there will a for each cpu core
+ * If not defined, there will be a thread for each cpu core
  */
 #define _EXTENSION_MAX_THREADS 4
 
