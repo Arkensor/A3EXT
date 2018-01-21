@@ -23,7 +23,7 @@
 #include "Processor.hpp"
 
 //Required thridparty includes
-#include "../ThridParty/spdlog/spdlog.h"
+#include "ThridParty/spdlog/spdlog.h"
 
 #define LOG_ALL( level, message) \
 spdlog::apply_all([&](std::shared_ptr<spdlog::logger> oLogger){oLogger->log( level, message ); oLogger->flush();});
@@ -35,11 +35,11 @@ namespace loglevel = spdlog::level;
 
 //Optional includes
 #ifdef _EXTENSION_USE_START_PARAMETERS
-    #include "../Framework/StartParameterHandler.hpp"
+    #include "StartParameterHandler.hpp"
 #endif
 
 #ifdef _EXTENSION_USE_INI_CONFIGURATION
-    #include "inih/INIReader.hpp"
+    #include "ThridParty/inih/INIReader.hpp"
 #endif
 
 //System includes
