@@ -1,11 +1,16 @@
+# This is the important bit for you, if you want to change the name of your extension in the build system
+set( EXTENSION_NAME A3EXT )
+
+# Only edit below if you need to
 cmake_minimum_required( VERSION 3.8 )
 
-project( A3EXT )
+project( ${EXTENSION_NAME} )
 
 SOURCE_GROUP( "Template Files" REGULAR_EXPRESSION ".*tpp" )
 
 set( CMAKE_CXX_STANDARD 14 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin )
 
 if( MSVC )
 #    add_compile_options( /W4 )
@@ -14,30 +19,10 @@ else()
 #    add_compile_options( -Wall -Wextra )
 endif()
 
-set( TARGET_HEADERS
-     Framework/DataTypes.hpp
-     Framework/StartParameterHandler.hpp
-     Framework/ExtensionBase.hpp
-     Framework/ProcessorWorkload.hpp
-     Framework/ProcessorResult.hpp
-     Framework/ProcessorQueue.hpp
-     Framework/Processor.hpp
-     Configuration.hpp  )
+file( GLOB TARGET_SOURCES *.cpp *.hpp Framework/*.cpp Framework/*.hpp Framework/*.tpp )
 
-set( TARGET_TEMPLATES
-     Framework/ProcessorQueue.tpp )
+set( SOURCE_FILES ${TARGET_SOURCES} )
 
-set( TARGET_SOURCES
-     Framework/ExtensionBase.cpp
-     Framework/StartParameterHandler.cpp
-     Framework/ExtensionEntry.cpp
-     Framework/ProcessorWorkload.cpp
-     Framework/ProcessorResult.cpp
-     Framework/Processor.cpp
-     Extension.cpp )
+add_library( ${EXTENSION_NAME} SHARED ${SOURCE_FILES} )
 
-set( SOURCE_FILES ${TARGET_HEADERS} ${TARGET_TEMPLATES} ${TARGET_SOURCES} )
-
-include_directories( ${PROJECT_SOURCE_DIR}/Framework/ThridParty )
-
-add_library( A3EXT SHARED ${SOURCE_FILES} )
+target_include_directories( ${EXTENSION_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/Framework/ThridParty )
