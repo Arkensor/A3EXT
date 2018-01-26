@@ -39,8 +39,12 @@ class CfgFunctions
             class enqueue { headerType = -1; };
             class dequeue { headerType = -1; };
             class request { headerType = -1; };
+        };
 
-            class startexamples { postInit = 1; headerType = -1; };
+        class Benchmark
+        {
+            file = "\A3EXT"
+            class benchmark { postInit = 1; headerType = -1; };
         };
     };
 };
