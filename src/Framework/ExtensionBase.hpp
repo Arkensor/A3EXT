@@ -1,3 +1,5 @@
+#ifndef A3DB_EXTENSIONBASE_HPP
+#define A3DB_EXTENSIONBASE_HPP
 /**********************************************************************************************************************\
 
     DESCRIPTION: Base extension that provides all the underlying functionality.
@@ -14,8 +16,6 @@
     All rights reserved!
 
 \**********************************************************************************************************************/
-#ifndef A3DB_EXTENSIONBASE_HPP
-#define A3DB_EXTENSIONBASE_HPP
 
 #include "../Configuration.hpp"
 
@@ -77,7 +77,7 @@ protected:
     std::shared_ptr< spdlog::logger > m_poConsoleLogger;
 #endif
 
-#ifdef _EXTENSION_USE_FILE_DEFAULT_LOGGER
+#ifdef _EXTENSION_USE_DEFAULT_FILE_LOGGER
     std::shared_ptr< spdlog::logger > m_poFileLogger;
 #endif
 

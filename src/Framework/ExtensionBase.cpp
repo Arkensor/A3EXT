@@ -65,7 +65,7 @@ CExtensionBase::CExtensionBase( const std::string & rstrName, const std::string 
     m_poConsoleLogger->set_pattern( "[%Y-%m-%d %H:%M:%S] %v" );
 #endif
 
-#ifdef _EXTENSION_USE_FILE_DEFAULT_LOGGER
+#ifdef _EXTENSION_USE_DEFAULT_FILE_LOGGER
     std::string strLogLocation = m_strExecutablePath + "/@" + m_strName + "/Logs";
 
     std::string strLogName = fmt::format( "{0}/{1}_{2}.log", strLogLocation, m_strName, GetDateTime( "%Y-%m-%d_%I-%M-%S" ) );

@@ -1,6 +1,6 @@
 /**********************************************************************************************************************\
 
-    DESCRIPTION: A3EXT - an extension framework for ArmA 3
+    DESCRIPTION: A3EXT - An extension framework for ArmA 3
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -15,28 +15,32 @@
 
 \**********************************************************************************************************************/
 
+waitUntil{ !isNil "A3EXT_NS" };
+
+g_nRuns = 3000;
+g_oResults = [];
+
+diag_log "started ...";
+
 [] spawn
 {
-    sleep 5;
-
-    arr = [];
-
-    for "_i" from 0 to 1300 do
+    for "_i" from 1 to g_nRuns do
     {
         [] spawn
         {
-            _test = [ "this is some sample data ...", 1 ] call A3EXT_fnc_request;
-            arr pushBack _test;
+            private _result = [ "this is some sample data ...", 1 ] call A3EXT_fnc_request;
+            g_oResults pushBack _result;
         };
     };
+};
 
-    [] spawn
-    {
-        _time = diag_tickTime;
-        waitUntil { count arr > 1300 };
+[] spawn
+{
+    _time = diag_tickTime;
 
-        diag_log format[ "FINISHED IN %1", diag_tickTime - _time ];
+    waitUntil { ( count g_oResults ) >= g_nRuns };
 
-        diag_log arr;
-    };
+    diag_log format[ "A3EXT - Examples: Processed %1 request(s) in %2 seconds(s) - %3 seconds per request.", ( count g_oResults ), ( diag_tickTime - _time ), ( diag_tickTime - _time ) / g_nRuns ];
+
+    diag_log format[ "A3EXT - Examples: Results: %1", g_oResults ];
 };

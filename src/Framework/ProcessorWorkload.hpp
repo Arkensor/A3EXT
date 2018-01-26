@@ -1,3 +1,5 @@
+#ifndef A3DB_WORKLOAD_HPP
+#define A3DB_WORKLOAD_HPP
 /**********************************************************************************************************************\
 
     DESCRIPTION: Workloads, parsed from the ArmA input
@@ -14,8 +16,6 @@
     All rights reserved!
 
 \**********************************************************************************************************************/
-#ifndef A3DB_WORKLOAD_HPP
-#define A3DB_WORKLOAD_HPP
 
 #include "DataTypes.hpp"
 

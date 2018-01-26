@@ -1,3 +1,5 @@
+#ifndef A3DB_DATATYPES_HPP
+#define A3DB_DATATYPES_HPP
 /**********************************************************************************************************************\
 
     DESCRIPTION: Datatyes that can be used to have precise byte sizes for the datatypes aross all compilers
@@ -14,8 +16,6 @@
     All rights reserved!
 
 \**********************************************************************************************************************/
-#ifndef A3DB_DATATYPES_HPP
-#define A3DB_DATATYPES_HPP
 
 #include <string>
 #include <vector>

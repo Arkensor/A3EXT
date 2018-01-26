@@ -1,3 +1,5 @@
+#ifndef A3DB_CONFIGURATION_HPP
+#define A3DB_CONFIGURATION_HPP
 /**********************************************************************************************************************\
 
     DESCRIPTION: Global configuration for the extension framework
@@ -14,51 +16,49 @@
     All rights reserved!
 
 \**********************************************************************************************************************/
-#ifndef A3DB_CONFIGURATION_HPP
-#define A3DB_CONFIGURATION_HPP
 
-/*
+/**
  * Extension configuration
  */
 #define _EXTENSION_NAME    "A3EXT"
 #define _EXTENSION_VERSION "1.0"
 
-/*
+/**
  * Define the maximum amount of threads that will be created
  * If not defined, there will be a thread for each cpu core
  */
 #define _EXTENSION_MAX_THREADS 4
 
-/*
+/**
  * Do you want to print something to the console?
  */
 #define _EXTENSION_USE_CONSOLE_LOGGING
 
-/*
+/**
  * Do you want to write log files?
  */
 #define _EXTENSION_USE_FILE_LOGGING
 
-/*
+/**
  * @Required: _EXTENSION_USE_FILE_LOGGING
  *
  * Using this provides you with a default log file that you can write to.
  * The default folder for the log files is @<Extensionname>/Logs/
  * The default name for the logfile is <Extensioname>.log
  */
-#define _EXTENSION_USE_FILE_DEFAULT_LOGGER
+#define _EXTENSION_USE_DEFAULT_FILE_LOGGER
 
-/*
+/**
  * Do you want to have access to the start parameters from the arma executable?
  */
 #define _EXTENSION_USE_START_PARAMETERS
 
-/*
+/**
  * Do you want to make use of the ini configuration system?
  */
 #define _EXTENSION_USE_INI_CONFIGURATION
 
-/*
+/**
  * @Required: _EXTENSION_USE_INI_CONFIGURATION
  *
  * You may specify the name of the config file

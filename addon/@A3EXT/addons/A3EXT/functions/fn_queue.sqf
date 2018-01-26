@@ -1,6 +1,6 @@
 /**********************************************************************************************************************\
 
-    DESCRIPTION: A3EXT - an extension framework for ArmA 3
+    DESCRIPTION: Queue that runs on the server handling input and output into/from the extension
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -17,6 +17,11 @@
 
 [] spawn
 {
+    if( !isNil "A3EXT_NS" ) exitWith
+    {
+        diag_log "ERROR: A3EXT could not be loaded, as a different extension used the same namespace.";
+    };
+
     A3EXT_NS = createLocation [ "Hill", [ -1000, -1000, 0 ], 0, 0 ];
 
     A3EXT_NS setVariable [ "A3EXT_BASE_FRAMETICK", 5 ];

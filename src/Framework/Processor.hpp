@@ -1,3 +1,5 @@
+#ifndef A3DB_PROCESSOR_HPP
+#define A3DB_PROCESSOR_HPP
 /**********************************************************************************************************************\
 
     DESCRIPTION: rocessor that handles incoming jobs using multiple threads
@@ -14,8 +16,6 @@
     All rights reserved!
 
 \**********************************************************************************************************************/
-#ifndef A3DB_PROCESSOR_HPP
-#define A3DB_PROCESSOR_HPP
 
 #include "ProcessorQueue.hpp"
 #include "ProcessorWorkload.hpp"

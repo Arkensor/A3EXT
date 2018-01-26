@@ -1,7 +1,7 @@
 /**********************************************************************************************************************\
 
     DESCRIPTION: Adds an element to the queue. Returns a ticket number is returned that will be used
-                 to fetch the results. If no results are expected the ticket number will return -1.
+                 to fetch the results. If no results are expected the ticket number will return -1
 
 ------------------------------------------------------------------------------------------------------------------------
 

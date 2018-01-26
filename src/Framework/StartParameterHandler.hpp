@@ -1,3 +1,5 @@
+#ifndef A3DB_STARTPARAMETERHANDLER_HPP
+#define A3DB_STARTPARAMETERHANDLER_HPP
 /**********************************************************************************************************************\
 
     DESCRIPTION: Handler to option a list of parameters, mods and server mods from the ArmA server
@@ -14,8 +16,6 @@
     All rights reserved!
 
 \**********************************************************************************************************************/
-#ifndef A3DB_STARTPARAMETERHANDLER_HPP
-#define A3DB_STARTPARAMETERHANDLER_HPP
 
 #include <map>
 #include <vector>

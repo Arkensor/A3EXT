@@ -1,3 +1,6 @@
+#ifndef A3DB_PROCESSORRESULT_HPP
+#define A3DB_PROCESSORRESULT_HPP
+
 /**********************************************************************************************************************\
 
     DESCRIPTION: Class that contains all information and data that is returned from the worker threads
@@ -14,8 +17,6 @@
     All rights reserved!
 
 \**********************************************************************************************************************/
-#ifndef A3DB_PROCESSORRESULT_HPP
-#define A3DB_PROCESSORRESULT_HPP
 
 #include "../Configuration.hpp"
 #include "DataTypes.hpp"

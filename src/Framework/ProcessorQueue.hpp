@@ -1,3 +1,6 @@
+#ifndef A3DB_PROCESSORQUEUE_HPP
+#define A3DB_PROCESSORQUEUE_HPP
+
 /**********************************************************************************************************************\
 
     DESCRIPTION: Thread safe locking queue
@@ -14,8 +17,6 @@
     All rights reserved!
 
 \**********************************************************************************************************************/
-#ifndef A3DB_PROCESSORQUEUE_HPP
-#define A3DB_PROCESSORQUEUE_HPP
 
 #include "DataTypes.hpp"
 
