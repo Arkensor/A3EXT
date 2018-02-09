@@ -1,5 +1,5 @@
-#ifndef A3DB_CONFIGURATION_HPP
-#define A3DB_CONFIGURATION_HPP
+#ifndef A3EXT_CONFIGURATION_HPP
+#define A3EXT_CONFIGURATION_HPP
 /**********************************************************************************************************************\
 
     DESCRIPTION: Global configuration for the extension framework
@@ -30,7 +30,7 @@
 #define _EXTENSION_MAX_THREADS 4
 
 /**
- * Do you want to print something to the console?
+ * Do you want to print something to the console? [Windows only]
  */
 #define _EXTENSION_USE_CONSOLE_LOGGING
 
@@ -71,4 +71,4 @@
  */
 #define _EXTENSION_CONFIGFILE_NAME "A3EXT.ini"
 
-#endif //A3DB_CONFIGURATION_HPP
+#endif //A3EXT_CONFIGURATION_HPP

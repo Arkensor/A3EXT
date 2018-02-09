@@ -20,6 +20,10 @@
 #include <filesystem>
 #include <sstream>
 
+#ifndef _WINDOWS
+#undef _EXTENSION_USE_CONSOLE_LOGGING
+#endif
+
 namespace A3
 {
 namespace Extension
