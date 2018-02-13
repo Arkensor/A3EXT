@@ -17,28 +17,25 @@
 
 class CfgPatches
 {
-    class A3EXT
+    class A3EXT_Benchmark
     {
-        requiredVersion = 1.67;
-        fileName = "A3EXT.pbo";
+		requiredVersion = 1.67;
+		requiredAddons[] = { "A3EXT" };
+        fileName = "A3EXT_Benchmark.pbo";
         author = "Arkensor";
     };
 };
 
 class CfgFunctions
 {
-    class A3EXT
+    class A3EXT_Benchmark
     {
-        tag = "A3EXT";
+        tag = "A3EXT_Benchmark";
 
         class Functions 
         {
-            file = "\A3EXT\functions";
-
-            class queue { preInit = 1; headerType = -1; };
-            class enqueue { headerType = -1; };
-            class dequeue { headerType = -1; };
-            class request { headerType = -1; };
+            file = "\A3EXT_Benchmark\functions";
+			class benchmark { postInit = 1; headerType = -1; };
         };
     };
 };
