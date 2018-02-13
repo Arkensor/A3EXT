@@ -49,18 +49,11 @@
 #define _EXTENSION_USE_DEFAULT_FILE_LOGGER
 
 /**
- * Do you want to have access to the start parameters from the arma executable?
- */
-#define _EXTENSION_USE_START_PARAMETERS
-
-/**
  * Do you want to make use of the ini configuration system?
  */
 #define _EXTENSION_USE_INI_CONFIGURATION
 
 /**
- * @Required: _EXTENSION_USE_INI_CONFIGURATION
- *
  * You may specify the name of the config file
  * that will be searched in the entire arma directory
  * and all subfolders.
