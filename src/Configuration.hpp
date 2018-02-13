@@ -35,13 +35,6 @@
 #define _EXTENSION_USE_CONSOLE_LOGGING
 
 /**
- * Do you want to write log files?
- */
-#define _EXTENSION_USE_FILE_LOGGING
-
-/**
- * @Required: _EXTENSION_USE_FILE_LOGGING
- *
  * Using this provides you with a default log file that you can write to.
  * The default folder for the log files is @<Extensionname>/Logs/
  * The default name for the logfile is <Extensioname>.log

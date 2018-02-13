@@ -24,34 +24,50 @@
 
     A3EXT_NS = createLocation [ "Hill", [ -1000, -1000, 0 ], 0, 0 ];
 
-    A3EXT_NS setVariable [ "A3EXT_BASE_FRAMETICK", 5 ];
+    A3EXT_NS setVariable [ "BASE_FRAMETICK", 5 ];
     A3EXT_NS setVariable [ "TICKET_ID", 0 ];
-    A3EXT_NS setVariable [ "A3EXT_INPUT_QUEUE", [] ];
+    A3EXT_NS setVariable [ "INPUT_QUEUE", [] ];
     A3EXT_NS setVariable [ "RESULTS_EXPECTED", 0 ];
 
     private _buffer = "";
+
+    private _debug = isClass( configFile >> "CfgPatches" >> "A3EXT_Benchmark" );
 
     private _parseResult =
     {
         params
         [
-            ["_data", [], [[]]]
+            ["_data", "[]", [ "" ]],
+            ["_returnCode", -1, [ 0 ]],
+            ["_errorCode", 500, [ 0 ]]
         ];
 
-        if ( _data isEqualTo [] ) exitWith {};
+        if ( _debug ) then
+        {
+            A3EXT_NS setVariable [ "DEBUG_EXTENSION_CALLS_COUNT", ( A3EXT_NS getVariable [ "DEBUG_EXTENSION_CALLS_COUNT", 0 ] ) + 1 ];
+        };
 
-        _data = parseSimpleArray ( _data select 0 );
+        if ( !( _returnCode isEqualTo 0 ) || !( _errorCode isEqualTo 0 ) ) exitWith
+        {
+            diag_log format[ "A3EXT: %1", _data ];
+
+            A3EXT_NS setVariable [ "EXTENSION_FAILURE", true ];
+        };
+
+        if ( _data isEqualTo "[]" ) exitWith {};
+
+        _data = parseSimpleArray ( _data );
 
         if ( !( _data isEqualTo [] ) ) then
         {
             {
-                _buffer = _buffer + ( _x select 2 );
+                _buffer = _buffer + ( _x param [ 2 ] );
 
-                private _currentIndex = _x select 1;
+                private _currentIndex = _x param [ 1 ];
 
-                if ( _currentIndex isEqualTo 0 || { _currentIndex isEqualTo -1 } ) then
+                if ( ( _currentIndex isEqualTo 0 ) || { _currentIndex isEqualTo -1 } ) then
                 {
-                    A3EXT_NS setVariable [ str (_x select 0), _buffer ];
+                    A3EXT_NS setVariable [ str( _x param [ 0 ] ), _buffer ];
 
                     private _results_exptected = A3EXT_NS getVariable [ "RESULTS_EXPECTED", 0 ];
 
@@ -72,7 +88,12 @@
 
     for "_i" from 0 to 1 step 0  do
     {
-        if !( count( A3EXT_NS getVariable [ "A3EXT_INPUT_QUEUE", [] ] ) isEqualTo 0 ) then
+        if ( A3EXT_NS getVariable [ "EXTENSION_FAILURE", false ] ) exitWith
+        {
+            A3EXT_NS = nil;
+        };
+
+        if !( count( A3EXT_NS getVariable [ "INPUT_QUEUE", [] ] ) isEqualTo 0 ) then
         {
             private _data = [];
 
@@ -81,41 +102,31 @@
                 {
                     _data pushBack _x;
 
-                    private _arr = ( A3EXT_NS getVariable [ "A3EXT_INPUT_QUEUE", [] ] );
+                    private _arr = ( A3EXT_NS getVariable [ "INPUT_QUEUE", [] ] );
 
                     if( count( _arr ) isEqualTo 0 ) exitWith {};
 
                     _arr deleteAt 0;
 
-                    A3EXT_NS setVariable [ "A3EXT_INPUT_QUEUE", _arr ];
+                    A3EXT_NS setVariable [ "INPUT_QUEUE", _arr ];
 
                     A3EXT_NS setVariable [ "RESULTS_EXPECTED", ( A3EXT_NS getVariable [ "RESULTS_EXPECTED", 0 ] ) + 1 ];
 
                     if ( _forEachIndex isEqualTo 1023 ) exitWith {};
 
-                } forEach +( A3EXT_NS getVariable [ "A3EXT_INPUT_QUEUE", [] ] );
+                } forEach +( A3EXT_NS getVariable [ "INPUT_QUEUE", [] ] );
             };
 
-            private _result = "A3EXT" callExtension [ "BULK", _data ];
-
-            //THIS SHOULD ONLY BE USED FOR DEBUGGING!!!
-            g_nExtensionCalls = g_nExtensionCalls + 1;
-
-            [ _result ] call _parseResult;
+            ( "A3EXT" callExtension [ "BULK", _data ] ) call _parseResult;
         }
         else
         {
             if !( A3EXT_NS getVariable [ "RESULTS_EXPECTED", 0 ] isEqualTo 0 ) then
             {
-                private _result = "A3EXT" callExtension [ "CHECK", [] ];
-
-                //THIS SHOULD ONLY BE USED FOR DEBUGGING!!!
-                g_nExtensionCalls = g_nExtensionCalls + 1;
-
-                [ _result ] call _parseResult;
+               ( "A3EXT" callExtension [ "CHECK", [] ] ) call _parseResult;
             };
 
-            sleep ( ( A3EXT_NS getVariable [ "A3EXT_BASE_FRAMETICK", 5 ] ) / diag_fps );
+            sleep ( ( A3EXT_NS getVariable [ "BASE_FRAMETICK", 5 ] ) / diag_fps );
         };
     };
 };

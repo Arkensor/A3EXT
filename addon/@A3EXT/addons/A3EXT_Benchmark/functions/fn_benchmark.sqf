@@ -23,7 +23,6 @@ g_nCallingThreads = 1000; //Simulating n requests from different sources like re
 g_nCallsEach = 10; //How many calls does each of the threads do for the simulation
 
 g_oResults = [];
-g_nExtensionCalls = 0;
 
 [] spawn
 {
@@ -31,15 +30,16 @@ g_nExtensionCalls = 0;
 
     waitUntil { ( count g_oResults ) >= ( g_nCallingThreads * g_nCallsEach ) };
 
-    diag_log format[ "%1 request(s) (%2 threads with %3 requests each) in %4 seconds(s) - %5 seconds per request -> The extension was called %6 times.",
-                     ( count g_oResults ),
-                     g_nCallingThreads,
-                     g_nCallsEach,
-                     ( diag_tickTime - _time ),
-                     ( diag_tickTime - _time ) / ( g_nCallingThreads * g_nCallsEach ),
-                     g_nExtensionCalls ];
+    private _result = format [ "A3EXT: %1 request(s) (%2 threads with %3 requests each) in %4 seconds(s) - %5 seconds per request -> The extension was called %6 times.",
+                         ( count g_oResults ),
+                         g_nCallingThreads,
+                         g_nCallsEach,
+                         ( diag_tickTime - _time ),
+                         ( diag_tickTime - _time ) / ( g_nCallingThreads * g_nCallsEach ),
+                         ( A3EXT_NS getVariable [ "DEBUG_EXTENSION_CALLS_COUNT", "undefined" ] ) ];
 
-    //diag_log format[ "A3EXT - Examples: Results: %1", g_oResults ];
+    diag_log _result;
+    diag_log format[ "A3EXT: Return results: %1", g_oResults ];
 };
 
 for "_i" from 1 to g_nCallingThreads do

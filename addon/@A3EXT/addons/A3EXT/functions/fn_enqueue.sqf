@@ -22,7 +22,12 @@ params
     [ "_return", 1, [ 0 ] ]
 ];
 
-private "_ticketID";
+private [ "_ticketID" ];
+
+if ( A3EXT_NS getVariable [ "EXTENSION_FAILURE", false ] ) exitWith
+{
+    -1;
+};
 
 if( _return isEqualTo 1 ) then
 {
@@ -31,9 +36,9 @@ if( _return isEqualTo 1 ) then
         _ticketID = ( A3EXT_NS getVariable [ "TICKET_ID", 0 ] );
         A3EXT_NS setVariable [ "TICKET_ID", ( _ticketID + 1 ) ];
 
-        private _arr = ( A3EXT_NS getVariable [ "A3EXT_INPUT_QUEUE", [] ] );
+        private _arr = ( A3EXT_NS getVariable [ "INPUT_QUEUE", [] ] );
         _arr pushBack format ["%1%2%3", _ticketID, toString [ 29 ], _data];
-        A3EXT_NS setVariable [ "A3EXT_INPUT_QUEUE", _arr ];
+        A3EXT_NS setVariable [ "INPUT_QUEUE", _arr ];
     };
 
     _ticketID;
@@ -42,9 +47,9 @@ else
 {
     isNil
     {
-        private _arr = ( A3EXT_NS getVariable [ "A3EXT_INPUT_QUEUE", [] ] );
+        private _arr = ( A3EXT_NS getVariable [ "INPUT_QUEUE", [] ] );
         _arr pushBack format ["%1%2%3", -1, toString [ 29 ], _data];
-        A3EXT_NS setVariable [ "A3EXT_INPUT_QUEUE", _arr ];
+        A3EXT_NS setVariable [ "INPUT_QUEUE", _arr ];
     };
 
     -1;

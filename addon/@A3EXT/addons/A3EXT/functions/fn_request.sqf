@@ -23,8 +23,7 @@ params
 
 private _ticketID = [ _data, _return ] call A3EXT_fnc_enqueue;
 
-if ( _return isEqualTo 1 && ( !( _ticketID isEqualTo -1 ) ) ) exitWith
+if ( ( _return isEqualTo 1 ) && { !( _ticketID isEqualTo -1 ) } ) exitWith
 {
-    private _result = [ _ticketID ] call A3EXT_fnc_dequeue;
-    _result;
+    [ _ticketID ] call A3EXT_fnc_dequeue;
 };
