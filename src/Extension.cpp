@@ -114,7 +114,7 @@ CExtensionBase::Execute( A3::Extension::Processor::CProcessorWorkload oWorkload 
      *
      * You can flush via m_poFileLogger->flush();
      */
-    m_poFileLogger->info( "The function called was: {0}", oWorkload.m_strFunction );
+    m_poConsoleLogger->info( "The function called was: {0}", oWorkload.m_strFunction );
 
     /**
      * All Arguments that are given the the framework from the SQF side, are parsed as a vector of strings.
@@ -125,8 +125,8 @@ CExtensionBase::Execute( A3::Extension::Processor::CProcessorWorkload oWorkload 
         //do something with oArugment ...
     }
 
-    //Some dummy work that takes 5 seconds to execute
-    //std::this_thread::sleep_for( std::chrono::seconds( 5 ) );
+    //Some dummy work that takes 0,5 second to execute
+    //std::this_thread::sleep_for( std::chrono::milliseconds( 500 ) );
 
     //Call a function that has been created by you like this as an example
     myOwnExamplefunction( oWorkload.m_strFunction );
